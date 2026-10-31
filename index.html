@@ -83,7 +83,7 @@ body{
         transform: translateY(105vh) rotate(360deg);
     }
 }
- /* 点击会叫的小猫 */
+/* 点击小猫 */
 .cat {
     font-size: 48px;
     cursor: pointer;
@@ -95,7 +95,10 @@ body{
 .cat:active {
     transform: scale(0.9);
 }
-   
+.intro{
+    position: relative;
+}
+
 </style>
 <!-- Meting 播放器依赖 -->
 <script src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script>
@@ -113,13 +116,11 @@ body{
     <div class="flower" style="left:85%;animation-duration:16s;">🌿</div>
 </div>
 
-<div class="wrap">
-    <!-- 自我介绍 -->
-    <div class="intro">
-        <div class="cat" id="cat">🐱</div>
-        <h2>hello，大家好</h2>
-        <p style="margin-top:8px;">这里是楔萩的网站</p>
-    </div>
+<div class="intro">
+    <div class="cat" id="cat">🐱</div>
+    <h2>hello，大家好</h2>
+    <p style="margin-top:8px;">这里是楔萩的网站</p>
+</div>
 
     <!-- 时钟 -->
     <div id="time-box">
@@ -455,28 +456,31 @@ start2048Btn.onclick = function(){
     game2048Run = true;
 }
 <script>
-const cat = document.getElementById('cat');
-// 创建气泡
-const bubble = document.createElement('div');
-bubble.innerText = "喵~";
-bubble.style.position = "absolute";
-bubble.style.fontSize = "22px";
-bubble.style.color = "#666";
-bubble.style.pointerEvents = "none";
-bubble.style.opacity = "0";
-bubble.style.transition = "all 0.6s ease-out";
-bubble.style.zIndex = "20";
-cat.parentElement.style.position = "relative";
-cat.parentElement.appendChild(bubble);
+document.addEventListener('DOMContentLoaded', function(){
+    const cat = document.getElementById('cat');
+    const bubble = document.createElement('div');
+    bubble.innerText = "喵~";
+    bubble.style.position = "absolute";
+    bubble.style.fontSize = "22px";
+    bubble.style.color = "#666";
+    bubble.style.pointerEvents = "none";
+    bubble.style.opacity = "0";
+    bubble.style.transition = "all 0.6s ease-out";
+    bubble.style.zIndex = "20";
+    bubble.style.left = "60px";
+    bubble.style.top = "-10px";
 
-cat.onclick = function(){
-    bubble.style.opacity = "1";
-    bubble.style.transform = "translateY(-30px)";
-    setTimeout(()=>{
-        bubble.style.opacity = "0";
-        bubble.style.transform = "translateY(0)";
-    },600);
-}
+    cat.parentElement.appendChild(bubble);
+
+    cat.onclick = function(){
+        bubble.style.opacity = "1";
+        bubble.style.transform = "translateY(-30px)";
+        setTimeout(()=>{
+            bubble.style.opacity = "0";
+            bubble.style.transform = "translateY(0)";
+        },600);
+    }
+})
 </script>
 
 
