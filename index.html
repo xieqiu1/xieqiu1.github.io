@@ -1,19 +1,42 @@
-
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
 <title>楔萩的小站</title>
 <style>
+*{
+    box-sizing: border-box;
+}
 body {
     font-family: system-ui, sans-serif;
-    max-width: 650px;
+    max-width: 700px;
     margin: 40px auto;
     padding: 0 20px;
     font-size: 18px;
+    background-color: #fefbf6;
+    color: #333;
+    position: relative;
+}
+/* 花草装饰 */
+.flower{
+    position: absolute;
+    font-size: 24px;
+    opacity: 0.7;
+    z-index: -1;
+}
+.f1{top:20px; left:10px;}
+.f2{top:120px; right:5px;}
+.f3{top:300px; left:5px;}
+.f4{top:500px; right:10px;}
+.f5{top:700px; left:15px;}
+.wrap{
+    background: rgba(255,255,255,0.75);
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
 }
 #time-box {
-    background: #f5f5f5;
+    background: #fff3e8;
     padding: 12px 16px;
     border-radius: 10px;
     display: inline-block;
@@ -23,18 +46,52 @@ body {
     margin-top: 30px;
 }
 #gameCanvas {
-    border: 2px solid #aaa;
+    border: 2px solid #ddd;
     background: #111;
-    border-radius: 8px;
+    border-radius: 12px;
+    display:block;
 }
 .score-text{
     color:#333;
     font-weight:bold;
 }
+.douyin-link{
+    display:inline-block;
+    margin:8px 0;
+    background:#000;
+    color:#fff;
+    padding:6px 14px;
+    border-radius:8px;
+    text-decoration:none;
+}
+.douyin-link:hover{
+    background:#25f4ee;
+    color:#000;
+}
+#startBtn{
+    margin:12px 0;
+    padding:10px 24px;
+    border:none;
+    background:#67c29c;
+    color:white;
+    border-radius:10px;
+    font-size:17px;
+    cursor:pointer;
+}
+#startBtn:hover{
+    background:#4ea882;
+}
 </style>
 </head>
 <body>
+<!-- 花草装饰 -->
+<div class="flower f1">🌷</div>
+<div class="flower f2">🌿</div>
+<div class="flower f3">🌸</div>
+<div class="flower f4">🌱</div>
+<div class="flower f5">🌼</div>
 
+<div class="wrap">
 <p>Hello 大家好</p>
 <p>我是楔萩，这是我的个人网站。 </p>
 <p>很高兴你来到这里</p>
@@ -43,11 +100,17 @@ body {
 📅 <span id="datetime"></span>
 </div>
 
+<p>
+<a class="douyin-link" href="https://v.douyin.com/pgCtiepZJqM/ 9@2.com " target="_blank">🎵 抖音</a>
+</p>
+
 <p>我会更新一些有趣的视频，欢迎你来找我玩。</p>
 
 <div id="gameBox">
 <h3>🎮 弹弹珠小游戏（打砖块） <span class="score-text">得分：<span id="score">0</span></span></h3>
 <canvas id="gameCanvas" width="600" height="350"></canvas>
+<button id="startBtn">开始游戏</button>
+</div>
 </div>
 
 <script>
@@ -71,6 +134,9 @@ setInterval(updateTime,1000);
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 const scoreDom = document.getElementById('score');
+const startBtn = document.getElementById('startBtn');
+
+let gameRunning = false;
 let score = 0;
 
 // 小球
@@ -166,29 +232,41 @@ function loop(){
     drawPaddle();
     collision();
 
-    // 左右边界反弹
-    if(ballX + dx < ballR || ballX + dx > canvas.width - ballR) dx = -dx;
-    // 顶部反弹
-    if(ballY + dy < ballR) dy = -dy;
-    // 碰到挡板
-    if(ballY + dy > paddleY - ballR && ballX > paddleX && ballX < paddleX + paddleW){
-        dy = -dy;
+    if(gameRunning){
+        // 左右边界反弹
+        if(ballX + dx < ballR || ballX + dx > canvas.width - ballR) dx = -dx;
+        // 顶部反弹
+        if(ballY + dy < ballR) dy = -dy;
+        // 碰到挡板
+        if(ballY + dy > paddleY - ballR && ballX > paddleX && ballX < paddleX + paddleW){
+            dy = -dy;
+        }
+        // 掉到底，游戏结束
+        if(ballY + dy > canvas.height){
+            gameRunning = false;
+            startBtn.innerText = "重新开始";
+        }
+        ballX += dx;
+        ballY += dy;
     }
-    // 掉到底，重置游戏
-    if(ballY + dy > canvas.height){
-        ballX = canvas.width/2;
-        ballY = canvas.height - 60;
-        dx = 4;
-        dy = -4;
-        initBricks();
-    }
-
-    ballX += dx;
-    ballY += dy;
     requestAnimationFrame(loop);
 }
 loop();
+
+// 开始按钮事件
+startBtn.onclick = function(){
+    // 重置小球位置
+    ballX = canvas.width / 2;
+    ballY = canvas.height - 60;
+    dx = 4;
+    dy = -4;
+    initBricks();
+    gameRunning = true;
+    startBtn.innerText = "游戏中";
+}
 </script>
 
 </body>
 </html>
+
+
