@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>我的小站</title>
+<title>楔萩的网站</title>
 <style>
 *{
     margin:0;
@@ -14,6 +14,8 @@ body{
     background-color:#fefbf6;
     font-family:system-ui, sans-serif;
     padding:20px 12px;
+    position: relative;
+    overflow-x:hidden;
 }
 .wrap{
     background: rgba(255,255,255,0.78);
@@ -56,6 +58,31 @@ body{
 .game-block{
     margin-top:30px;
 }
+
+/* ========== 飘落小花小草动画代码 ========== */
+.flower-container{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    pointer-events:none;
+    z-index:0;
+}
+.flower{
+    position:absolute;
+    font-size:24px;
+    opacity:0.55;
+    animation: fall linear infinite;
+}
+@keyframes fall {
+    0%{
+        transform: translateY(-30px) rotate(0deg);
+    }
+    100%{
+        transform: translateY(105vh) rotate(360deg);
+    }
+}
 </style>
 <!-- Meting 播放器依赖 -->
 <script src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script>
@@ -63,12 +90,21 @@ body{
 <script src="https://cdn.jsdelivr.net/npm/meting@2.0.2/dist/Meting.min.js"></script>
 </head>
 <body>
-<div class="wrap">
+<!-- ========== 小花小草元素 ========== -->
+<div class="flower-container">
+    <div class="flower" style="left:10%;animation-duration:12s;">🌸</div>
+    <div class="flower" style="left:25%;animation-duration:15s;">🌿</div>
+    <div class="flower" style="left:40%;animation-duration:10s;">🌼</div>
+    <div class="flower" style="left:55%;animation-duration:18s;">🌱</div>
+    <div class="flower" style="left:70%;animation-duration:13s;">🌸</div>
+    <div class="flower" style="left:85%;animation-duration:16s;">🌿</div>
+</div>
 
-    <!-- 自我介绍，你可以自己修改文字 -->
+<div class="wrap">
+    <!-- 自我介绍 -->
     <div class="intro">
-        <h2>👋 你好呀，欢迎来到楔萩的小站</h2>
-        <p style="margin-top:8px;">这里是我的个人小主页，里面有我的歌单还有小游戏，随便逛逛~</p>
+        <h2>hello，大家好</h2>
+        <p style="margin-top:8px;">这里是楔萩的网站</p>
     </div>
 
     <!-- 时钟 -->
@@ -81,11 +117,11 @@ body{
         <a class="douyin-link" href="https://v.douyin.com/pgCtiepZJqM/ 9@2.com " target="_blank">🎵 抖音</a>
     </p>
     <p style="margin:15px 0;">
-        <a class="douyin-link" href=" https://b23.tv/LqrRUlM" target="_blank">📺 B站</a>
+        <a class="douyin-link" href="https://b23.tv/LqrRUlM" target="_blank">📺 B站</a>
     </p>
 
     <p style="margin:15px 0;color:#555;">
-        我会更新一些有趣的视频
+        我会在这里更新一些有趣的视频
     </p>
 
     <!-- 网易云歌单 -->
@@ -99,7 +135,7 @@ body{
         </meting-js>
     </div>
 
-    <!-- ========== 弹弹珠（平铺无弹窗） ========== -->
+    <!-- ========== 弹弹珠 ========== -->
     <div class="game-block">
         <h3>🎮 弹弹珠小游戏 <span class="score-text">得分：<span id="score">0</span></span></h3>
         <canvas id="gameCanvas" width="600" height="340" style="width:100%;border:2px solid #ddd;border-radius:12px;background:#111;margin-top:8px;"></canvas>
@@ -109,7 +145,7 @@ body{
         </div>
     </div>
 
-    <!-- ========== 2048（平铺无弹窗） ========== -->
+    <!-- ========== 2048 ========== -->
     <div class="game-block">
         <h3>🧩 2048｜得分：<span id="score2048">0</span></h3>
         <div id="grid2048" style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;background:#bbada0;padding:8px;border-radius:8px;margin-top:8px;max-width:400px;">
@@ -119,14 +155,13 @@ body{
             <span style="color:#666;font-size:14px;">电脑方向键 / 手机上下左右滑动</span>
         </div>
     </div>
-
 </div>
 
 <script>
 // 时钟代码
 function updateTime(){
     const now = new Date();
-    document.getElementById('datetime').innerText = now.toLocaleString('zh-CN');
+    document.getElementById('datetime').innerText = now.toLocaleString();
 }
 updateTime();
 setInterval(updateTime,1000);
