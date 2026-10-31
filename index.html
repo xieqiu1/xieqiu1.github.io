@@ -456,13 +456,23 @@ start2048Btn.onclick = function(){
 }
 <script>
 const cat = document.getElementById('cat');
-// 换成可靠的喵叫
-const meow = new Audio("https://www.soundjay.com/meow/sounds/meow-01.mp3");
-cat.onclick = function(){
-    meow.currentTime = 0;
-    meow.play();
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+cat.onclick = async function(){
+    if(audioCtx.state === 'suspended') await audioCtx.resume();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(580, audioCtx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(320, audioCtx.currentTime + 0.22);
+    gain.gain.setValueAtTime(0.35, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.22);
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.22);
 }
 </script>
+
 
 </body>
 </html>
