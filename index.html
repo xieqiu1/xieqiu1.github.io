@@ -48,78 +48,82 @@ body{
 #musicBox{
     margin:25px 0;
 }
+.intro{
+    color:#555;
+    line-height:1.7;
+    margin-bottom:20px;
+}
+.game-block{
+    margin-top:30px;
+}
 </style>
+<!-- Meting 播放器依赖 -->
+<script src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css">
+<script src="https://cdn.jsdelivr.net/npm/meting@2.0.2/dist/Meting.min.js"></script>
 </head>
 <body>
 <div class="wrap">
 
+    <!-- 自我介绍，你可以自己修改文字 -->
+    <div class="intro">
+        <h2>👋 你好呀，欢迎来到楔萩的小站</h2>
+        <p style="margin-top:8px;">这里是我的个人小主页，里面有我的歌单还有小游戏，随便逛逛~</p>
+    </div>
+
+    <!-- 时钟 -->
     <div id="time-box">
         📅 <span id="datetime"></span>
     </div>
 
+    <!-- 抖音 B站 -->
     <p style="margin:15px 0;">
-        <a class="douyin-link" href="你的抖音链接" target="_blank">🎵 抖音</a>
+        <a class="douyin-link" href="https://v.douyin.com/pgCtiepZJqM/ 9@2.com " target="_blank">🎵 抖音</a>
     </p>
-
     <p style="margin:15px 0;">
-        <a class="douyin-link" href="你的B站主页链接" target="_blank">📺 B站</a>
+        <a class="douyin-link" href=" https://b23.tv/LqrRUlM" target="_blank">📺 B站</a>
     </p>
 
     <p style="margin:15px 0;color:#555;">
         我会更新一些有趣的视频
     </p>
 
+    <!-- 网易云歌单 -->
     <div id="musicBox">
         <h3>🎵 我的歌单</h3>
         <meting-js
             server="netease"
             type="playlist"
-            id="你的歌单ID"
+            id="18500790802"
             theme="#67c29c">
         </meting-js>
     </div>
 
-    <!-- ========== 弹弹珠游戏入口+弹窗 ========== -->
-    <p style="margin:25px 0;">
-        <a class="douyin-link" id="openGameBtn" href="javascript:void(0)">🎮 去玩弹弹珠小游戏</a>
-    </p>
-    <div id="gameModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:10;display:flex;align-items:center;justify-content:center;padding:15px;">
-        <div style="background:#fff;padding:20px;border-radius:16px;max-width:620px;width:100%;">
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-                <h3>🎮 弹弹珠小游戏 <span class="score-text">得分：<span id="score">0</span></span></h3>
-                <a id="closeGameBtn" href="javascript:void(0)" style="text-decoration:none;color:#666;">✖ 关闭</a>
-            </div>
-            <canvas id="gameCanvas" width="600" height="340" style="width:100%;border:2px solid #ddd;border-radius:12px;background:#111;"></canvas>
-            <div style="margin-top:10px;display:flex;gap:10px;align-items:center;">
-                <a class="douyin-link" id="startGameBtn" href="javascript:void(0)">▶ 开始游戏</a>
-                <span style="color:#666;font-size:14px;">手机：左右滑动屏幕控制挡板</span>
-            </div>
+    <!-- ========== 弹弹珠（平铺无弹窗） ========== -->
+    <div class="game-block">
+        <h3>🎮 弹弹珠小游戏 <span class="score-text">得分：<span id="score">0</span></span></h3>
+        <canvas id="gameCanvas" width="600" height="340" style="width:100%;border:2px solid #ddd;border-radius:12px;background:#111;margin-top:8px;"></canvas>
+        <div style="margin-top:10px;display:flex;gap:10px;align-items:center;">
+            <a class="douyin-link" id="startGameBtn" href="javascript:void(0)">▶ 开始游戏</a>
+            <span style="color:#666;font-size:14px;">手机：左右滑动屏幕控制挡板</span>
         </div>
     </div>
-   <!-- 2048游戏入口按钮 -->
-<p style="margin:25px 0;">
-<a class="douyin-link" id="open2048Btn" href="javascript:void(0)">🧩 2048小游戏</a>
-</p>
 
-<!-- 2048弹窗，默认隐藏 -->
-<div id="game2048Modal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:11;display:flex;align-items:center;justify-content:center;padding:15px;">
-    <div style="background:#fff;padding:20px;border-radius:16px;max-width:420px;width:100%;">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-            <h3>🧩 2048｜得分：<span id="score2048">0</span></h3>
-            <a id="close2048Btn" href="javascript:void(0)" style="text-decoration:none;color:#666;">✖ 关闭</a>
-        </div>
-        <div id="grid2048" style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;background:#bbada0;padding:8px;border-radius:8px;">
+    <!-- ========== 2048（平铺无弹窗） ========== -->
+    <div class="game-block">
+        <h3>🧩 2048｜得分：<span id="score2048">0</span></h3>
+        <div id="grid2048" style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;background:#bbada0;padding:8px;border-radius:8px;margin-top:8px;max-width:400px;">
         </div>
         <div style="margin-top:10px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
             <a class="douyin-link" id="start2048Btn" href="javascript:void(0)">▶ 开始游戏</a>
             <span style="color:#666;font-size:14px;">电脑方向键 / 手机上下左右滑动</span>
         </div>
     </div>
+
 </div>
- 
 
 <script>
-// 时钟
+// 时钟代码
 function updateTime(){
     const now = new Date();
     document.getElementById('datetime').innerText = now.toLocaleString('zh-CN');
@@ -130,13 +134,10 @@ setInterval(updateTime,1000);
 
 <!-- 弹弹珠 JS -->
 <script>
-const modal = document.getElementById('gameModal');
-const openBtn = document.getElementById('openGameBtn');
-const closeBtn = document.getElementById('closeGameBtn');
-const startGameBtn = document.getElementById('startGameBtn');
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 const scoreDom = document.getElementById('score');
+const startGameBtn = document.getElementById('startGameBtn');
 
 let gameRunning = false;
 let score = 0;
@@ -234,33 +235,23 @@ function resetGame(){
     initBricks();
     draw();
 }
+resetGame();
 
-openBtn.onclick = function(){
-    modal.style.display = "flex";
-    resetGame();
-    gameRunning = false;
-}
-closeBtn.onclick = function(){
-    modal.style.display = "none";
-    gameRunning = false;
-}
 startGameBtn.onclick = function(){
     gameRunning = true;
     update();
 }
 </script>
+
+<!-- 2048 JS -->
 <script>
-const modal2048 = document.getElementById('game2048Modal');
-const open2048Btn = document.getElementById('open2048Btn');
-const close2048Btn = document.getElementById('close2048Btn');
-const start2048Btn = document.getElementById('start2048Btn');
 const scoreDom2048 = document.getElementById('score2048');
 const gridWrap = document.getElementById('grid2048');
+const start2048Btn = document.getElementById('start2048Btn');
 
 let grid = [];
 let score2048 = 0;
 let game2048Run = false;
-// 格子颜色
 const colorMap = {
     0:"#cdc1b4",
     2:"#eee4da",
@@ -276,7 +267,6 @@ const colorMap = {
     2048:"#edc22e"
 };
 
-// 初始化4*4网格
 function initGrid(){
     grid = Array(4).fill().map(()=>Array(4).fill(0));
     score2048 = 0;
@@ -285,7 +275,6 @@ function initGrid(){
     addRandom();
     renderGrid();
 }
-// 随机生成2或者4
 function addRandom(){
     let empty = [];
     for(let i=0;i<4;i++){
@@ -298,7 +287,6 @@ function addRandom(){
     grid[x][y] = Math.random()>0.2 ? 2 :4;
     return true;
 }
-// 渲染页面
 function renderGrid(){
     gridWrap.innerHTML = "";
     for(let i=0;i<4;i++){
@@ -320,7 +308,6 @@ function renderGrid(){
     }
 }
 
-// 向左移动
 function moveLeft(){
     let moved = false;
     for(let i=0;i<4;i++){
@@ -340,7 +327,6 @@ function moveLeft(){
     scoreDom2048.innerText = score2048;
     return moved;
 }
-// 矩阵旋转
 function rotate(g){
     const res = Array(4).fill().map(()=>Array(4).fill(0));
     for(let i=0;i<4;i++){
@@ -350,7 +336,6 @@ function rotate(g){
     }
     return res;
 }
-// 移动控制
 function move(dir){
     if(!game2048Run) return;
     let moved = false;
@@ -376,7 +361,6 @@ function move(dir){
         checkGameOver();
     }
 }
-// 判断游戏结束
 function checkGameOver(){
     for(let i=0;i<4;i++){
         for(let j=0;j<4;j++){
@@ -390,7 +374,6 @@ function checkGameOver(){
     alert("游戏结束！得分："+score2048);
 }
 
-// 键盘方向键
 document.onkeydown = function(e){
     if(!game2048Run) return;
     switch(e.key){
@@ -400,7 +383,6 @@ document.onkeydown = function(e){
         case "ArrowDown": move("down");break;
     }
 }
-// 手机触屏滑动
 let touchStartX = 0, touchStartY =0;
 gridWrap.ontouchstart = e=>{
     touchStartX = e.touches[0].clientX;
@@ -419,20 +401,11 @@ gridWrap.ontouchend = e=>{
     }
 }
 
-open2048Btn.onclick = function(){
-    modal2048.style.display = "flex";
-    initGrid();
-    game2048Run = false;
-}
-close2048Btn.onclick = function(){
-    modal2048.style.display = "none";
-    game2048Run = false;
-}
+initGrid();
 start2048Btn.onclick = function(){
     game2048Run = true;
 }
 </script>
-
 
 </body>
 </html>
