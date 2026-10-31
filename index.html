@@ -456,20 +456,30 @@ start2048Btn.onclick = function(){
 }
 <script>
 const cat = document.getElementById('cat');
-const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+let audioCtx = null;
+
 cat.onclick = async function(){
-    if(audioCtx.state === 'suspended') await audioCtx.resume();
+    // 第一次点击才创建音频环境，绕过浏览器限制
+    if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    if(audioCtx.state === 'suspended'){
+        await audioCtx.resume();
+    }
     const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
     osc.connect(gain);
     gain.connect(audioCtx.destination);
+
     osc.type = 'sine';
-    osc.frequency.setValueAtTime(580, audioCtx.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(320, audioCtx.currentTime + 0.22);
-    gain.gain.setValueAtTime(0.35, audioCtx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.22);
+    // 喵呜音调
+    osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(300, audioCtx.currentTime + 0.25);
+    gain.gain.setValueAtTime(0.4, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.25);
+
     osc.start();
-    osc.stop(audioCtx.currentTime + 0.22);
+    osc.stop(audioCtx.currentTime + 0.25);
 }
 </script>
 
