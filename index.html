@@ -2,6 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>楔萩的小站</title>
 <style>
 *{
@@ -15,25 +16,27 @@ body {
     font-size: 18px;
     background-color: #fefbf6;
     color: #333;
-    position: relative;
 }
-/* 花草装饰 */
+/* 花草装饰 fixed 固定在屏幕四角，手机电脑都能看到 */
 .flower{
-    position: absolute;
-    font-size: 24px;
+    position: fixed;
+    font-size: 26px;
     opacity: 0.7;
-    z-index: -1;
+    z-index: 0;
+    pointer-events: none; /* 不会挡住点击游戏、按钮 */
 }
-.f1{top:20px; left:10px;}
-.f2{top:120px; right:5px;}
-.f3{top:300px; left:5px;}
-.f4{top:500px; right:10px;}
-.f5{top:700px; left:15px;}
+.f1{top:15px; left:12px;}
+.f2{top:15px; right:12px;}
+.f3{bottom:15px; left:12px;}
+.f4{bottom:15px; right:12px;}
+.f5{top:50%; left:8px; transform:translateY(-50%);}
 .wrap{
     background: rgba(255,255,255,0.75);
     padding: 30px;
     border-radius: 20px;
     box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    position: relative;
+    z-index: 1;
 }
 #time-box {
     background: #fff3e8;
@@ -50,6 +53,8 @@ body {
     background: #111;
     border-radius: 12px;
     display:block;
+    max-width: 100%;
+    height: auto;
 }
 .score-text{
     color:#333;
@@ -84,12 +89,12 @@ body {
 </style>
 </head>
 <body>
-<!-- 花草装饰 -->
+<!-- 花草装饰，四角+侧边，手机电脑都可见 -->
 <div class="flower f1">🌷</div>
 <div class="flower f2">🌿</div>
 <div class="flower f3">🌸</div>
-<div class="flower f4">🌱</div>
-<div class="flower f5">🌼</div>
+<div class="flower f4">🌼</div>
+<div class="flower f5">🌱</div>
 
 <div class="wrap">
 <p>Hello 大家好</p>
@@ -182,6 +187,16 @@ initBricks();
 canvas.addEventListener('mousemove', (e)=>{
     const rect = canvas.getBoundingClientRect();
     paddleX = e.clientX - rect.left - paddleW/2;
+    if(paddleX < 0) paddleX = 0;
+    if(paddleX + paddleW > canvas.width) paddleX = canvas.width - paddleW;
+})
+
+// 手机触摸滑动控制挡板
+canvas.addEventListener('touchmove', (e)=>{
+    e.preventDefault();
+    const rect = canvas.getBoundingClientRect();
+    const touch = e.touches[0];
+    paddleX = touch.clientX - rect.left - paddleW/2;
     if(paddleX < 0) paddleX = 0;
     if(paddleX + paddleW > canvas.width) paddleX = canvas.width - paddleW;
 })
