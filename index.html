@@ -83,6 +83,19 @@ body{
         transform: translateY(105vh) rotate(360deg);
     }
 }
+ /* 点击会叫的小猫 */
+.cat {
+    font-size: 48px;
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.15s;
+    display: inline-block;
+    margin-bottom: 8px;
+}
+.cat:active {
+    transform: scale(0.9);
+}
+   
 </style>
 <!-- Meting 播放器依赖 -->
 <script src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script>
@@ -103,6 +116,7 @@ body{
 <div class="wrap">
     <!-- 自我介绍 -->
     <div class="intro">
+        <div class="cat" id="cat">🐱</div>
         <h2>hello，大家好</h2>
         <p style="margin-top:8px;">这里是楔萩的网站</p>
     </div>
@@ -440,6 +454,15 @@ initGrid();
 start2048Btn.onclick = function(){
     game2048Run = true;
 }
+ <script>
+const cat = document.getElementById('cat');
+const meow = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-software-interface-start-2574.mp3');
+cat.onclick = function(){
+    meow.currentTime = 0;
+    meow.play();
+}
+</script>
+   
 </script>
 
 </body>
