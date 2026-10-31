@@ -96,6 +96,10 @@ body {
     background:#4ea882;
 }
 </style>
+   <script src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css">
+<script src="https://cdn.jsdelivr.net/npm/meting@2.0.1/dist/Meting.min.js"></script>
+ 
 </head>
 <body>
 <!-- 花草装饰，四角+侧边，手机电脑都可见 -->
@@ -112,17 +116,24 @@ body {
 
 <div id="time-box">
 📅 <span id="datetime"></span>
+<div id="musicBox">
+<h3>🎵 我的歌单</h3>
+<meting-js
+    server="netease"
+    type="playlist"
+    id="3018939320"
+    autoplay="false"
+    theme="#67c29c"
+    list-folded="false">
+</meting-js>
 </div>
+
 
 <p>
 <a class="douyin-link" href="https://v.douyin.com/pgCtiepZJqM/ 9@2.com " target="_blank">🎵 抖音</a>
 </p>
 <div id="musicBox">
-<h3>🎵 我的歌单</h3>
-<iframe class="music-iframe" frameborder="no" border="0" marginwidth="0" marginheight="0" width="100%" height="310"
-src="https://music.163.com/outchain/player?type=2&id=3018939320&auto=0&height=290">
-</iframe>
-</div>
+
 
 <p>我会更新一些有趣的视频，欢迎你来找我玩。</p>
 
