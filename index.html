@@ -1,9 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>楔萩的小站</title>
+<style>
+body {
+    font-family: system-ui, sans-serif;
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 0 20px;
+    font-size: 18px;
+}
+#time-box {
+    background: #f5f5f5;
+    padding: 12px 16px;
+    border-radius: 10px;
+    display: inline-block;
+    margin: 10px 0;
+}
+</style>
+</head>
+<body>
+
 <p>Hello 大家好</p>
 <p>我是楔萩，这是我的个人网站。 </p>
 <p>很高兴你来到这里, 你可以在以下的网站找到我</p>
+
+<!-- 时钟区域 -->
+<div id="time-box">
+📅 <span id="datetime"></span>
+</div>
 
 <ul>
   <li> <a href="https://s.xsj.qq.com/8qSPO6qs">QQ小世界</a> </li>
   <li> <a href="https://b23.tv/DaMyQHn">哔哩哔哩</a> </li>
 </ul>
 <p>我会更新一些有趣的视频，欢迎你来找我玩。</p>
+
+<script>
+function updateTime(){
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = now.getMonth()+1;
+    const day = now.getDate();
+    const weekArr = ["星期日","星期一","星期二","星期三","星期四","星期五","星期六"];
+    const week = weekArr[now.getDay()];
+    const h = String(now.getHours()).padStart(2,'0');
+    const m = String(now.getMinutes()).padStart(2,'0');
+    const s = String(now.getSeconds()).padStart(2,'0');
+    document.getElementById("datetime").innerText = `${year}年${month}月${day}日 ${week} ${h}:${m}:${s}`;
+}
+updateTime();
+setInterval(updateTime,1000);
+</script>
+
+</body>
+</html>
