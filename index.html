@@ -83,7 +83,7 @@ body{
         transform: translateY(105vh) rotate(360deg);
     }
 }
-/* 点击小猫 */
+/* 小猫 */
 .cat {
     font-size: 48px;
     cursor: pointer;
@@ -95,8 +95,14 @@ body{
 .cat:active {
     transform: scale(0.9);
 }
-.intro{
-    position: relative;
+
+/* 掉落的喵文字 */
+.meow-text {
+    position: fixed;
+    font-size: 24px;
+    color: #777;
+    pointer-events: none;
+    z-index: 99;
 }
 
 </style>
@@ -458,30 +464,45 @@ start2048Btn.onclick = function(){
 <script>
 document.addEventListener('DOMContentLoaded', function(){
     const cat = document.getElementById('cat');
-    const bubble = document.createElement('div');
-    bubble.innerText = "喵~";
-    bubble.style.position = "absolute";
-    bubble.style.fontSize = "22px";
-    bubble.style.color = "#666";
-    bubble.style.pointerEvents = "none";
-    bubble.style.opacity = "0";
-    bubble.style.transition = "all 0.6s ease-out";
-    bubble.style.zIndex = "20";
-    bubble.style.left = "60px";
-    bubble.style.top = "-10px";
+    cat.onclick = function(e){
+        // 获取小猫在页面上的坐标
+        const rect = cat.getBoundingClientRect();
+        const meow = document.createElement('div');
+        meow.className = 'meow-text';
+        meow.innerText = '喵~';
+        // 起始位置：小猫旁边
+        meow.style.left = rect.left + 30 + 'px';
+        meow.style.top = rect.top + 'px';
+        document.body.appendChild(meow);
 
-    cat.parentElement.appendChild(bubble);
+        // 掉落动画
+        let y = 0;
+        let bounce = 0;
+        const gravity = 2;
+        let speed = 0;
+        function fall(){
+            speed += gravity;
+            y += speed;
+            meow.style.top = rect.top + y + 'px';
 
-    cat.onclick = function(){
-        bubble.style.opacity = "1";
-        bubble.style.transform = "translateY(-30px)";
-        setTimeout(()=>{
-            bubble.style.opacity = "0";
-            bubble.style.transform = "translateY(0)";
-        },600);
+            // 落地反弹两次
+            if(y > 80 && bounce < 2){
+                speed = -speed * 0.45;
+                bounce++;
+            }
+            // 反弹完消失
+            if(bounce >=2 && speed > 0){
+                meow.style.opacity = 0;
+                setTimeout(()=>meow.remove(), 300);
+                return;
+            }
+            requestAnimationFrame(fall);
+        }
+        fall();
     }
 })
 </script>
+
 
 
 </body>
