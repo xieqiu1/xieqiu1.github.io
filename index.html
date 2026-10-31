@@ -156,7 +156,10 @@ body {
             <a id="closeGameBtn" href="javascript:void(0)" style="text-decoration:none;color:#666;">✖ 关闭</a>
         </div>
         <canvas id="gameCanvas" width="600" height="340" style="width:100%;border:2px solid #ddd;border-radius:12px;background:#111;"></canvas>
-        <p style="margin-top:8px;color:#666;font-size:14px;">手机：左右滑动屏幕控制挡板</p>
+        <div style="margin-top:10px;display:flex;gap:10px;align-items:center;">
+            <a class="douyin-link" id="startGameBtn" href="javascript:void(0)">▶ 开始游戏</a>
+            <span style="color:#666;font-size:14px;">手机：左右滑动屏幕控制挡板</span>
+        </div>
     </div>
 </div>
 <!-- 找茬游戏入口按钮 -->
@@ -164,7 +167,6 @@ body {
 <a class="douyin-link" id="openFindBtn" href="javascript:void(0)">🔍 一起来找茬</a>
 </p>
 
-<!-- 找茬弹窗，默认隐藏 -->
 <div id="findModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:11;display:flex;align-items:center;justify-content:center;padding:15px;">
     <div style="background:#fff;padding:20px;border-radius:16px;max-width:640px;width:100%;">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
@@ -175,7 +177,10 @@ body {
             <canvas id="findCanvasA" width="300" height="240" style="width:49%;border:2px solid #ddd;border-radius:10px;"></canvas>
             <canvas id="findCanvasB" width="300" height="240" style="width:49%;border:2px solid #ddd;border-radius:10px;"></canvas>
         </div>
-        <p style="margin-top:10px;color:#666;font-size:14px;">左右两张图，点击不一样的位置！<br>提示：一共有3处不同</p>
+        <div style="margin-top:10px;display:flex;gap:10px;align-items:center;">
+            <a class="douyin-link" id="startFindBtn" href="javascript:void(0)">▶ 开始游戏</a>
+            <span style="color:#666;font-size:14px;">左右两张图，找到3处不同点击</span>
+        </div>
     </div>
 </div>
 
@@ -197,28 +202,23 @@ function updateTime(){
 updateTime();
 setInterval(updateTime,1000);
 <script>
-// 弹窗开关
+<script>
 const modal = document.getElementById('gameModal');
 const openBtn = document.getElementById('openGameBtn');
 const closeBtn = document.getElementById('closeGameBtn');
-openBtn.onclick = ()=> modal.style.display = 'flex';
-closeBtn.onclick = ()=> {modal.style.display = 'none';gameRunning = false;};
-
+const startGameBtn = document.getElementById('startGameBtn');
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 const scoreDom = document.getElementById('score');
 
 let gameRunning = false;
 let score = 0;
-// 小球（减速！）
 let ballX = canvas.width/2, ballY = canvas.height-60;
 let ballR = 8;
 let dx = 2.2, dy = -2.2;
-// 挡板（加宽！）
 let paddleW = 110, paddleH = 14;
 let paddleX = canvas.width/2 - paddleW/2;
 const paddleY = canvas.height - 25;
-// 砖块
 const row = 4, col = 7;
 const brickW = 72, brickH = 16;
 const brickPad = 8;
@@ -237,7 +237,6 @@ function initBricks(){
     }
 }
 
-// 鼠标控制
 canvas.onmousemove = e=>{
     if(!gameRunning) return;
     const rect = canvas.getBoundingClientRect();
@@ -246,7 +245,6 @@ canvas.onmousemove = e=>{
     if(paddleX<0) paddleX=0;
     if(paddleX+paddleW>canvas.width) paddleX = canvas.width-paddleW;
 }
-// 触屏滑动（手机重点）
 canvas.ontouchmove = e=>{
     e.preventDefault();
     if(!gameRunning) return;
@@ -259,15 +257,12 @@ canvas.ontouchmove = e=>{
 
 function draw(){
     ctx.clearRect(0,0,canvas.width,canvas.height);
-    // 挡板
     ctx.fillStyle="#42a5f5";
     ctx.fillRect(paddleX,paddleY,paddleW,paddleH);
-    // 小球
     ctx.beginPath();
     ctx.arc(ballX,ballY,ballR,0,Math.PI*2);
     ctx.fillStyle="#fff";
     ctx.fill();
-    // 砖块
     bricks.forEach(b=>{
         if(b.alive){
             ctx.fillStyle="#ef5350";
@@ -280,15 +275,11 @@ function update(){
     if(!gameRunning) return;
     ballX += dx;
     ballY += dy;
-    // 左右墙反弹
     if(ballX-ballR <=0 || ballX+ballR >= canvas.width) dx = -dx;
-    // 顶墙反弹
     if(ballY-ballR <=0) dy = -dy;
-    // 挡板碰撞
     if(ballY+ballR >= paddleY && ballX >= paddleX && ballX <= paddleX+paddleW){
         dy = -dy;
     }
-    // 砖块碰撞
     bricks.forEach(b=>{
         if(b.alive && ballX> b.x && ballX < b.x+b.w && ballY-ballR < b.y+b.h && ballY+ballR> b.y){
             dy = -dy;
@@ -297,7 +288,6 @@ function update(){
             scoreDom.innerText = score;
         }
     })
-    // 掉到底，游戏结束
     if(ballY > canvas.height){
         gameRunning = false;
         alert("游戏结束！得分："+score);
@@ -315,19 +305,30 @@ function resetGame(){
     dx = 2.2; dy = -2.2;
     paddleX = canvas.width/2 - paddleW/2;
     initBricks();
+    draw();
 }
-// 打开弹窗自动开局
+
 openBtn.onclick = function(){
+    modal.style.display = "flex";
     resetGame();
+    gameRunning = false;
+}
+closeBtn.onclick = function(){
+    modal.style.display = "none";
+    gameRunning = false;
+}
+startGameBtn.onclick = function(){
     gameRunning = true;
     update();
 }
 </script>
 
 <script>
+<script>
 const findModal = document.getElementById('findModal');
 const openFindBtn = document.getElementById('openFindBtn');
 const closeFindBtn = document.getElementById('closeFindBtn');
+const startFindBtn = document.getElementById('startFindBtn');
 const findScoreDom = document.getElementById('findScore');
 const cavA = document.getElementById('findCanvasA');
 const cavB = document.getElementById('findCanvasB');
@@ -338,7 +339,6 @@ let findScore = 0;
 let answerList = [];
 let gameFindRunning = false;
 
-// 绘制基础图
 function drawBase(ctx){
     ctx.fillStyle="#f7f3e9";
     ctx.fillRect(0,0,300,240);
@@ -357,18 +357,14 @@ function drawBase(ctx){
     ctx.arc(150,130,25,0.1*Math.PI,0.9*Math.PI);
     ctx.stroke();
 }
-// 绘制修改后的图（三处不同）
 function drawDiff(ctx){
     drawBase(ctx);
-    // 差异1
     ctx.fillStyle="#ff7777";
     ctx.fillRect(50,40,20,20);
-    // 差异2
     ctx.fillStyle="#5588dd";
     ctx.beginPath();
     ctx.arc(240,180,12,0,Math.PI*2);
     ctx.fill();
-    // 差异3
     ctx.fillStyle="#eebb44";
     ctx.fillRect(220,50,15,15);
 }
@@ -383,9 +379,9 @@ function resetFindGame(){
     ];
     drawBase(ctxA);
     drawDiff(ctxB);
+    gameFindRunning = false;
 }
 
-// 点击判断
 cavB.onclick = function(e){
     if(!gameFindRunning) return;
     const rect = cavB.getBoundingClientRect();
@@ -412,13 +408,16 @@ cavB.onclick = function(e){
 openFindBtn.onclick = function(){
     findModal.style.display = "flex";
     resetFindGame();
-    gameFindRunning = true;
 }
 closeFindBtn.onclick = function(){
     findModal.style.display = "none";
     gameFindRunning = false;
 }
+startFindBtn.onclick = function(){
+    gameFindRunning = true;
+}
 </script>
+
 
 
 </body>
