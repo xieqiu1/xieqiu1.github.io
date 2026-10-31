@@ -115,6 +115,9 @@ body {
 <p>Hello 大家好</p>
 <p>我是楔萩，这是我的个人网站。 </p>
 <p>很高兴你来到这里</p>
+<p style="margin:15px 0;color:#555;">
+我会更新一些有趣的视频
+</p>
 
 <div id="time-box">
 📅 <span id="datetime"></span>
@@ -140,17 +143,44 @@ body {
     list-folded="false">
 </meting-js>
 </div>
+<!-- 游戏入口按钮 -->
+<p style="margin:25px 0;">
+<a class="douyin-link" id="openGameBtn" href="javascript:void(0)">🎮 去玩弹弹珠小游戏</a>
+</p>
 
-<p>我会更新一些有趣的视频，欢迎你来找我玩。</p>
-
-<div id="gameBox">
-<h3>🎮 弹弹珠小游戏（打砖块） <span class="score-text">得分：<span id="score">0</span></span></h3>
-<canvas id="gameCanvas" width="600" height="350"></canvas>
-<button id="startBtn">开始游戏</button>
+<!-- 游戏浮窗，默认隐藏 -->
+<div id="gameModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:10;display:flex;align-items:center;justify-content:center;padding:15px;">
+    <div style="background:#fff;padding:20px;border-radius:16px;max-width:620px;width:100%;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+            <h3>🎮 弹弹珠小游戏 <span class="score-text">得分：<span id="score">0</span></span></h3>
+            <a id="closeGameBtn" href="javascript:void(0)" style="text-decoration:none;color:#666;">✖ 关闭</a>
+        </div>
+        <canvas id="gameCanvas" width="600" height="340" style="width:100%;border:2px solid #ddd;border-radius:12px;background:#111;"></canvas>
+        <p style="margin-top:8px;color:#666;font-size:14px;">手机：左右滑动屏幕控制挡板</p>
+    </div>
 </div>
+<!-- 找茬游戏入口按钮 -->
+<p style="margin:25px 0;">
+<a class="douyin-link" id="openFindBtn" href="javascript:void(0)">🔍 一起来找茬</a>
+</p>
+
+<!-- 找茬弹窗，默认隐藏 -->
+<div id="findModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:11;display:flex;align-items:center;justify-content:center;padding:15px;">
+    <div style="background:#fff;padding:20px;border-radius:16px;max-width:640px;width:100%;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+            <h3>🔍 一起来找茬｜得分：<span id="findScore">0</span></h3>
+            <a id="closeFindBtn" href="javascript:void(0)" style="text-decoration:none;color:#666;">✖ 关闭</a>
+        </div>
+        <div style="display:flex;gap:8px;">
+            <canvas id="findCanvasA" width="300" height="240" style="width:49%;border:2px solid #ddd;border-radius:10px;"></canvas>
+            <canvas id="findCanvasB" width="300" height="240" style="width:49%;border:2px solid #ddd;border-radius:10px;"></canvas>
+        </div>
+        <p style="margin-top:10px;color:#666;font-size:14px;">左右两张图，点击不一样的位置！<br>提示：一共有3处不同</p>
+    </div>
 </div>
 
 <script>
+    
 // 时钟代码
 function updateTime(){
     const now = new Date();
@@ -166,152 +196,230 @@ function updateTime(){
 }
 updateTime();
 setInterval(updateTime,1000);
+<script>
+// 弹窗开关
+const modal = document.getElementById('gameModal');
+const openBtn = document.getElementById('openGameBtn');
+const closeBtn = document.getElementById('closeGameBtn');
+openBtn.onclick = ()=> modal.style.display = 'flex';
+closeBtn.onclick = ()=> {modal.style.display = 'none';gameRunning = false;};
 
-// ========== 弹弹珠打砖块游戏 ==========
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 const scoreDom = document.getElementById('score');
-const startBtn = document.getElementById('startBtn');
 
 let gameRunning = false;
 let score = 0;
-
-// 小球
-let ballX = canvas.width / 2;
-let ballY = canvas.height - 60;
+// 小球（减速！）
+let ballX = canvas.width/2, ballY = canvas.height-60;
 let ballR = 8;
-let dx = 4;
-let dy = -4;
-
-// 挡板
-const paddleW = 100;
-const paddleH = 12;
-let paddleX = canvas.width / 2 - paddleW / 2;
+let dx = 2.2, dy = -2.2;
+// 挡板（加宽！）
+let paddleW = 110, paddleH = 14;
+let paddleX = canvas.width/2 - paddleW/2;
 const paddleY = canvas.height - 25;
-
 // 砖块
-const brickRow = 4;
-const brickCol = 7;
-const brickW = 70;
-const brickH = 18;
-const brickPad = 6;
-const brickTop = 30;
-const brickLeft = 10;
+const row = 4, col = 7;
+const brickW = 72, brickH = 16;
+const brickPad = 8;
 let bricks = [];
 
 function initBricks(){
-    score = 0;
-    scoreDom.innerText = score;
-    for(let r=0; r<brickRow; r++){
-        bricks[r] = [];
-        for(let c=0; c<brickCol; c++){
-            bricks[r][c] = {
-                x: c*(brickW+brickPad)+brickLeft,
-                y: r*(brickH+brickPad)+brickTop,
-                alive: true
-            }
+    bricks = [];
+    for(let r=0;r<row;r++){
+        for(let c=0;c<col;c++){
+            bricks.push({
+                x: c*(brickW+brickPad)+10,
+                y: r*(brickH+brickPad)+10,
+                w:brickW, h:brickH, alive:true
+            })
         }
     }
 }
-initBricks();
 
-// 鼠标控制挡板
-canvas.addEventListener('mousemove', (e)=>{
+// 鼠标控制
+canvas.onmousemove = e=>{
+    if(!gameRunning) return;
     const rect = canvas.getBoundingClientRect();
-    paddleX = e.clientX - rect.left - paddleW/2;
-    if(paddleX < 0) paddleX = 0;
-    if(paddleX + paddleW > canvas.width) paddleX = canvas.width - paddleW;
-})
-
-// 手机触摸滑动控制挡板
-canvas.addEventListener('touchmove', (e)=>{
+    const x = e.clientX - rect.left;
+    paddleX = x - paddleW/2;
+    if(paddleX<0) paddleX=0;
+    if(paddleX+paddleW>canvas.width) paddleX = canvas.width-paddleW;
+}
+// 触屏滑动（手机重点）
+canvas.ontouchmove = e=>{
     e.preventDefault();
+    if(!gameRunning) return;
     const rect = canvas.getBoundingClientRect();
-    const touch = e.touches[0];
-    paddleX = touch.clientX - rect.left - paddleW/2;
-    if(paddleX < 0) paddleX = 0;
-    if(paddleX + paddleW > canvas.width) paddleX = canvas.width - paddleW;
-})
+    const x = e.touches[0].clientX - rect.left;
+    paddleX = x - paddleW/2;
+    if(paddleX<0) paddleX=0;
+    if(paddleX+paddleW>canvas.width) paddleX = canvas.width-paddleW;
+}
 
-function drawBall(){
+function draw(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    // 挡板
+    ctx.fillStyle="#42a5f5";
+    ctx.fillRect(paddleX,paddleY,paddleW,paddleH);
+    // 小球
     ctx.beginPath();
-    ctx.arc(ballX, ballY, ballR, 0, Math.PI*2);
+    ctx.arc(ballX,ballY,ballR,0,Math.PI*2);
     ctx.fillStyle="#fff";
     ctx.fill();
-    ctx.closePath();
-}
-function drawPaddle(){
-    ctx.fillStyle="#42a5f5";
-    ctx.fillRect(paddleX, paddleY, paddleW, paddleH);
-}
-function drawBricks(){
-    for(let r=0; r<brickRow; r++){
-        for(let c=0; c<brickCol; c++){
-            const b = bricks[r][c];
-            if(b.alive){
-                ctx.fillStyle="#ef5350";
-                ctx.fillRect(b.x,b.y,brickW,brickH);
-            }
+    // 砖块
+    bricks.forEach(b=>{
+        if(b.alive){
+            ctx.fillStyle="#ef5350";
+            ctx.fillRect(b.x,b.y,b.w,b.h);
         }
-    }
+    })
 }
 
-function collision(){
-    for(let r=0; r<brickRow; r++){
-        for(let c=0; c<brickCol; c++){
-            const b = bricks[r][c];
-            if(b.alive){
-                if(ballX > b.x && ballX < b.x+brickW && ballY > b.y && ballY < b.y+brickH){
-                    dy = -dy;
-                    b.alive = false;
-                    score += 10;
-                    scoreDom.innerText = score;
-                }
-            }
-        }
+function update(){
+    if(!gameRunning) return;
+    ballX += dx;
+    ballY += dy;
+    // 左右墙反弹
+    if(ballX-ballR <=0 || ballX+ballR >= canvas.width) dx = -dx;
+    // 顶墙反弹
+    if(ballY-ballR <=0) dy = -dy;
+    // 挡板碰撞
+    if(ballY+ballR >= paddleY && ballX >= paddleX && ballX <= paddleX+paddleW){
+        dy = -dy;
     }
-}
-
-function loop(){
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    drawBricks();
-    drawBall();
-    drawPaddle();
-    collision();
-
-    if(gameRunning){
-        // 左右边界反弹
-        if(ballX + dx < ballR || ballX + dx > canvas.width - ballR) dx = -dx;
-        // 顶部反弹
-        if(ballY + dy < ballR) dy = -dy;
-        // 碰到挡板
-        if(ballY + dy > paddleY - ballR && ballX > paddleX && ballX < paddleX + paddleW){
+    // 砖块碰撞
+    bricks.forEach(b=>{
+        if(b.alive && ballX> b.x && ballX < b.x+b.w && ballY-ballR < b.y+b.h && ballY+ballR> b.y){
             dy = -dy;
+            b.alive = false;
+            score +=10;
+            scoreDom.innerText = score;
         }
-        // 掉到底，游戏结束
-        if(ballY + dy > canvas.height){
-            gameRunning = false;
-            startBtn.innerText = "重新开始";
-        }
-        ballX += dx;
-        ballY += dy;
+    })
+    // 掉到底，游戏结束
+    if(ballY > canvas.height){
+        gameRunning = false;
+        alert("游戏结束！得分："+score);
+        resetGame();
     }
-    requestAnimationFrame(loop);
+    draw();
+    requestAnimationFrame(update);
 }
-loop();
 
-// 开始按钮事件
-startBtn.onclick = function(){
-    // 重置小球位置
-    ballX = canvas.width / 2;
-    ballY = canvas.height - 60;
-    dx = 4;
-    dy = -4;
+function resetGame(){
+    score = 0;
+    scoreDom.innerText = score;
+    ballX = canvas.width/2;
+    ballY = canvas.height -60;
+    dx = 2.2; dy = -2.2;
+    paddleX = canvas.width/2 - paddleW/2;
     initBricks();
+}
+// 打开弹窗自动开局
+openBtn.onclick = function(){
+    resetGame();
     gameRunning = true;
-    startBtn.innerText = "游戏中";
+    update();
 }
 </script>
+
+<script>
+const findModal = document.getElementById('findModal');
+const openFindBtn = document.getElementById('openFindBtn');
+const closeFindBtn = document.getElementById('closeFindBtn');
+const findScoreDom = document.getElementById('findScore');
+const cavA = document.getElementById('findCanvasA');
+const cavB = document.getElementById('findCanvasB');
+const ctxA = cavA.getContext('2d');
+const ctxB = cavB.getContext('2d');
+
+let findScore = 0;
+let answerList = [];
+let gameFindRunning = false;
+
+// 绘制基础图
+function drawBase(ctx){
+    ctx.fillStyle="#f7f3e9";
+    ctx.fillRect(0,0,300,240);
+    ctx.fillStyle="#72b872";
+    ctx.beginPath();
+    ctx.arc(150,120,60,0,Math.PI*2);
+    ctx.fill();
+    ctx.fillStyle="#333";
+    ctx.beginPath();
+    ctx.arc(130,105,8,0,Math.PI*2);
+    ctx.arc(170,105,8,0,Math.PI*2);
+    ctx.fill();
+    ctx.strokeStyle="#333";
+    ctx.lineWidth=3;
+    ctx.beginPath();
+    ctx.arc(150,130,25,0.1*Math.PI,0.9*Math.PI);
+    ctx.stroke();
+}
+// 绘制修改后的图（三处不同）
+function drawDiff(ctx){
+    drawBase(ctx);
+    // 差异1
+    ctx.fillStyle="#ff7777";
+    ctx.fillRect(50,40,20,20);
+    // 差异2
+    ctx.fillStyle="#5588dd";
+    ctx.beginPath();
+    ctx.arc(240,180,12,0,Math.PI*2);
+    ctx.fill();
+    // 差异3
+    ctx.fillStyle="#eebb44";
+    ctx.fillRect(220,50,15,15);
+}
+
+function resetFindGame(){
+    findScore = 0;
+    findScoreDom.innerText = findScore;
+    answerList = [
+        {x:50,y:40,r:22},
+        {x:240,y:180,r:14},
+        {x:220,y:50,r:17}
+    ];
+    drawBase(ctxA);
+    drawDiff(ctxB);
+}
+
+// 点击判断
+cavB.onclick = function(e){
+    if(!gameFindRunning) return;
+    const rect = cavB.getBoundingClientRect();
+    const scaleX = 300 / rect.width;
+    const scaleY = 240 / rect.height;
+    const clickX = (e.clientX - rect.left)*scaleX;
+    const clickY = (e.clientY - rect.top)*scaleY;
+    for(let i=answerList.length-1;i>=0;i--){
+        const p = answerList[i];
+        const dist = Math.hypot(clickX-p.x, clickY-p.y);
+        if(dist < p.r){
+            answerList.splice(i,1);
+            findScore += 1;
+            findScoreDom.innerText = findScore;
+            if(answerList.length === 0){
+                alert("🎉恭喜！全部找完啦！");
+                gameFindRunning = false;
+            }
+            return;
+        }
+    }
+}
+
+openFindBtn.onclick = function(){
+    findModal.style.display = "flex";
+    resetFindGame();
+    gameFindRunning = true;
+}
+closeFindBtn.onclick = function(){
+    findModal.style.display = "none";
+    gameFindRunning = false;
+}
+</script>
+
 
 </body>
 </html>
