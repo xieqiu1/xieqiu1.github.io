@@ -3,205 +3,132 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>楔萩的小站</title>
+<title>我的小站</title>
 <style>
 *{
-    box-sizing: border-box;
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
 }
-body {
-    font-family: system-ui, sans-serif;
-    max-width: 700px;
-    margin: 40px auto;
-    padding: 0 20px;
-    font-size: 18px;
-    background-color: #fefbf6;
-    color: #333;
+body{
+    background-color:#fefbf6;
+    font-family:system-ui, sans-serif;
+    padding:20px 12px;
 }
-/* 花草装饰 fixed 固定在屏幕四角，手机电脑都能看到 */
-.flower{
-    position: fixed;
-    font-size: 26px;
-    opacity: 0.7;
-    z-index: 0;
-    pointer-events: none; /* 不会挡住点击游戏、按钮 */
-}
-.f1{top:15px; left:12px;}
-.f2{top:15px; right:12px;}
-.f3{bottom:15px; left:12px;}
-.f4{bottom:15px; right:12px;}
-.f5{top:50%; left:8px; transform:translateY(-50%);}
 .wrap{
-    background: rgba(255,255,255,0.75);
+    background: rgba(255,255,255,0.78);
     padding: 30px;
     border-radius: 20px;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08), 0 0 20px rgba(255,248,230,0.4);
     position: relative;
     z-index: 1;
-}
-#time-box {
-    background: #fff3e8;
-    padding: 12px 16px;
-    border-radius: 10px;
-    display: inline-block;
-    margin: 10px 0;
-    #musicBox{
-    margin:25px 0;
-}
-.music-iframe{
-    width:100%;
-    border-radius:10px;
-    border:none;
-}
-
-}
-#gameBox {
-    margin-top: 30px;
-}
-#gameCanvas {
-    border: 2px solid #ddd;
-    background: #111;
-    border-radius: 12px;
-    display:block;
-    max-width: 100%;
-    height: auto;
-}
-.score-text{
-    color:#333;
-    font-weight:bold;
+    max-width:700px;
+    margin:0 auto;
 }
 .douyin-link{
     display:inline-block;
-    margin:8px 0;
-    background:#000;
+    padding:9px 18px;
+    background:#67c29c;
     color:#fff;
-    padding:6px 14px;
-    border-radius:8px;
     text-decoration:none;
+    border-radius:999px;
+    transition: all 0.25s ease;
 }
 .douyin-link:hover{
-    background:#25f4ee;
+    background:#25b864;
     color:#000;
+    transform: scale(1.03);
+    box-shadow: 0 3px 8px rgba(103, 194, 156,0.35);
 }
-#startBtn{
-    margin:12px 0;
-    padding:10px 24px;
-    border:none;
-    background:#67c29c;
-    color:white;
-    border-radius:10px;
-    font-size:17px;
-    cursor:pointer;
+#time-box{
+    margin:10px 0;
+    font-size:16px;
+    color:#555;
 }
-#startBtn:hover{
-    background:#4ea882;
+#musicBox{
+    margin:25px 0;
 }
 </style>
-   <script src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css">
-<script src="https://cdn.jsdelivr.net/npm/meting@2.0.1/dist/Meting.min.js"></script>
-
-
- 
 </head>
 <body>
-<!-- 花草装饰，四角+侧边，手机电脑都可见 -->
-<div class="flower f1">🌷</div>
-<div class="flower f2">🌿</div>
-<div class="flower f3">🌸</div>
-<div class="flower f4">🌼</div>
-<div class="flower f5">🌱</div>
-
 <div class="wrap">
-<p>Hello 大家好</p>
-<p>我是楔萩，这是我的个人网站。 </p>
-<p>很高兴你来到这里</p>
-<p style="margin:15px 0;color:#555;">
-我会更新一些有趣的视频
-</p>
 
-<div id="time-box">
-📅 <span id="datetime"></span>
-<div
+    <div id="time-box">
+        📅 <span id="datetime"></span>
+    </div>
 
+    <p style="margin:15px 0;">
+        <a class="douyin-link" href="你的抖音链接" target="_blank">🎵 抖音</a>
+    </p>
 
+    <p style="margin:15px 0;">
+        <a class="douyin-link" href="你的B站主页链接" target="_blank">📺 B站</a>
+    </p>
 
-<p>
-<a class="douyin-link" href="https://v.douyin.com/pgCtiepZJqM/ 9@2.com " target="_blank">🎵 抖音</a>
-</p>
-  <p>
-<a class="douyin-link" href="https://b23.tv/LqrRUlM" target="_blank">📺 B站</a>
-</p>
-  
-  <div id="musicBox">
-<h3>🎵 我的歌单</h3>
-<meting-js
-    server="netease"
-    type="playlist"
-    id="18500790802"
-    autoplay="false"
-    theme="#67c29c"
-    list-folded="false">
-</meting-js>
-</div>
-<!-- 游戏入口按钮 -->
-<p style="margin:25px 0;">
-<a class="douyin-link" id="openGameBtn" href="javascript:void(0)">🎮 去玩弹弹珠小游戏</a>
-</p>
+    <p style="margin:15px 0;color:#555;">
+        我会更新一些有趣的视频
+    </p>
 
-<!-- 游戏浮窗，默认隐藏 -->
-<div id="gameModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:10;display:flex;align-items:center;justify-content:center;padding:15px;">
-    <div style="background:#fff;padding:20px;border-radius:16px;max-width:620px;width:100%;">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-            <h3>🎮 弹弹珠小游戏 <span class="score-text">得分：<span id="score">0</span></span></h3>
-            <a id="closeGameBtn" href="javascript:void(0)" style="text-decoration:none;color:#666;">✖ 关闭</a>
+    <div id="musicBox">
+        <h3>🎵 我的歌单</h3>
+        <meting-js
+            server="netease"
+            type="playlist"
+            id="你的歌单ID"
+            theme="#67c29c">
+        </meting-js>
+    </div>
+
+    <!-- ========== 弹弹珠游戏入口+弹窗 ========== -->
+    <p style="margin:25px 0;">
+        <a class="douyin-link" id="openGameBtn" href="javascript:void(0)">🎮 去玩弹弹珠小游戏</a>
+    </p>
+    <div id="gameModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:10;display:flex;align-items:center;justify-content:center;padding:15px;">
+        <div style="background:#fff;padding:20px;border-radius:16px;max-width:620px;width:100%;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+                <h3>🎮 弹弹珠小游戏 <span class="score-text">得分：<span id="score">0</span></span></h3>
+                <a id="closeGameBtn" href="javascript:void(0)" style="text-decoration:none;color:#666;">✖ 关闭</a>
+            </div>
+            <canvas id="gameCanvas" width="600" height="340" style="width:100%;border:2px solid #ddd;border-radius:12px;background:#111;"></canvas>
+            <div style="margin-top:10px;display:flex;gap:10px;align-items:center;">
+                <a class="douyin-link" id="startGameBtn" href="javascript:void(0)">▶ 开始游戏</a>
+                <span style="color:#666;font-size:14px;">手机：左右滑动屏幕控制挡板</span>
+            </div>
         </div>
-        <canvas id="gameCanvas" width="600" height="340" style="width:100%;border:2px solid #ddd;border-radius:12px;background:#111;"></canvas>
-        <div style="margin-top:10px;display:flex;gap:10px;align-items:center;">
-            <a class="douyin-link" id="startGameBtn" href="javascript:void(0)">▶ 开始游戏</a>
-            <span style="color:#666;font-size:14px;">手机：左右滑动屏幕控制挡板</span>
+    </div>
+   <!-- 2048游戏入口按钮 -->
+<p style="margin:25px 0;">
+<a class="douyin-link" id="open2048Btn" href="javascript:void(0)">🧩 2048小游戏</a>
+</p>
+
+<!-- 2048弹窗，默认隐藏 -->
+<div id="game2048Modal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:11;display:flex;align-items:center;justify-content:center;padding:15px;">
+    <div style="background:#fff;padding:20px;border-radius:16px;max-width:420px;width:100%;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+            <h3>🧩 2048｜得分：<span id="score2048">0</span></h3>
+            <a id="close2048Btn" href="javascript:void(0)" style="text-decoration:none;color:#666;">✖ 关闭</a>
+        </div>
+        <div id="grid2048" style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;background:#bbada0;padding:8px;border-radius:8px;">
+        </div>
+        <div style="margin-top:10px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+            <a class="douyin-link" id="start2048Btn" href="javascript:void(0)">▶ 开始游戏</a>
+            <span style="color:#666;font-size:14px;">电脑方向键 / 手机上下左右滑动</span>
         </div>
     </div>
 </div>
-<!-- 找茬游戏入口按钮 -->
-<p style="margin:25px 0;">
-<a class="douyin-link" id="openFindBtn" href="javascript:void(0)">🔍 一起来找茬</a>
-</p>
-
-<div id="findModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:11;display:flex;align-items:center;justify-content:center;padding:15px;">
-    <div style="background:#fff;padding:20px;border-radius:16px;max-width:640px;width:100%;">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-            <h3>🔍 一起来找茬｜得分：<span id="findScore">0</span></h3>
-            <a id="closeFindBtn" href="javascript:void(0)" style="text-decoration:none;color:#666;">✖ 关闭</a>
-        </div>
-        <div style="display:flex;gap:8px;">
-            <canvas id="findCanvasA" width="300" height="240" style="width:49%;border:2px solid #ddd;border-radius:10px;"></canvas>
-            <canvas id="findCanvasB" width="300" height="240" style="width:49%;border:2px solid #ddd;border-radius:10px;"></canvas>
-        </div>
-        <div style="margin-top:10px;display:flex;gap:10px;align-items:center;">
-            <a class="douyin-link" id="startFindBtn" href="javascript:void(0)">▶ 开始游戏</a>
-            <span style="color:#666;font-size:14px;">左右两张图，找到3处不同点击</span>
-        </div>
-    </div>
-</div>
+ 
 
 <script>
-    
-// 时钟代码
+// 时钟
 function updateTime(){
     const now = new Date();
-    const year = now.getFullYear();
-    const month = now.getMonth()+1;
-    const day = now.getDate();
-    const weekArr = ["星期日","星期一","星期二","星期三","星期四","星期五","星期六"];
-    const week = weekArr[now.getDay()];
-    const h = String(now.getHours()).padStart(2,'0');
-    const m = String(now.getMinutes()).padStart(2,'0');
-    const s = String(now.getSeconds()).padStart(2,'0');
-    document.getElementById("datetime").innerText = `${year}年${month}月${day}日 ${week} ${h}:${m}:${s}`;
+    document.getElementById('datetime').innerText = now.toLocaleString('zh-CN');
 }
 updateTime();
 setInterval(updateTime,1000);
-<script>
+</script>
+
+<!-- 弹弹珠 JS -->
 <script>
 const modal = document.getElementById('gameModal');
 const openBtn = document.getElementById('openGameBtn');
@@ -322,105 +249,190 @@ startGameBtn.onclick = function(){
     update();
 }
 </script>
-
 <script>
-<script>
-const findModal = document.getElementById('findModal');
-const openFindBtn = document.getElementById('openFindBtn');
-const closeFindBtn = document.getElementById('closeFindBtn');
-const startFindBtn = document.getElementById('startFindBtn');
-const findScoreDom = document.getElementById('findScore');
-const cavA = document.getElementById('findCanvasA');
-const cavB = document.getElementById('findCanvasB');
-const ctxA = cavA.getContext('2d');
-const ctxB = cavB.getContext('2d');
+const modal2048 = document.getElementById('game2048Modal');
+const open2048Btn = document.getElementById('open2048Btn');
+const close2048Btn = document.getElementById('close2048Btn');
+const start2048Btn = document.getElementById('start2048Btn');
+const scoreDom2048 = document.getElementById('score2048');
+const gridWrap = document.getElementById('grid2048');
 
-let findScore = 0;
-let answerList = [];
-let gameFindRunning = false;
+let grid = [];
+let score2048 = 0;
+let game2048Run = false;
+// 格子颜色
+const colorMap = {
+    0:"#cdc1b4",
+    2:"#eee4da",
+    4:"#ede0c8",
+    8:"#f2b179",
+    16:"#f59563",
+    32:"#f67c5f",
+    64:"#f65e3b",
+    128:"#edcf72",
+    256:"#edcc61",
+    512:"#edc850",
+    1024:"#edc53f",
+    2048:"#edc22e"
+};
 
-function drawBase(ctx){
-    ctx.fillStyle="#f7f3e9";
-    ctx.fillRect(0,0,300,240);
-    ctx.fillStyle="#72b872";
-    ctx.beginPath();
-    ctx.arc(150,120,60,0,Math.PI*2);
-    ctx.fill();
-    ctx.fillStyle="#333";
-    ctx.beginPath();
-    ctx.arc(130,105,8,0,Math.PI*2);
-    ctx.arc(170,105,8,0,Math.PI*2);
-    ctx.fill();
-    ctx.strokeStyle="#333";
-    ctx.lineWidth=3;
-    ctx.beginPath();
-    ctx.arc(150,130,25,0.1*Math.PI,0.9*Math.PI);
-    ctx.stroke();
+// 初始化4*4网格
+function initGrid(){
+    grid = Array(4).fill().map(()=>Array(4).fill(0));
+    score2048 = 0;
+    scoreDom2048.innerText = score2048;
+    addRandom();
+    addRandom();
+    renderGrid();
 }
-function drawDiff(ctx){
-    drawBase(ctx);
-    ctx.fillStyle="#ff7777";
-    ctx.fillRect(50,40,20,20);
-    ctx.fillStyle="#5588dd";
-    ctx.beginPath();
-    ctx.arc(240,180,12,0,Math.PI*2);
-    ctx.fill();
-    ctx.fillStyle="#eebb44";
-    ctx.fillRect(220,50,15,15);
+// 随机生成2或者4
+function addRandom(){
+    let empty = [];
+    for(let i=0;i<4;i++){
+        for(let j=0;j<4;j++){
+            if(grid[i][j]===0) empty.push([i,j]);
+        }
+    }
+    if(empty.length ===0) return false;
+    const [x,y] = empty[Math.floor(Math.random()*empty.length)];
+    grid[x][y] = Math.random()>0.2 ? 2 :4;
+    return true;
 }
-
-function resetFindGame(){
-    findScore = 0;
-    findScoreDom.innerText = findScore;
-    answerList = [
-        {x:50,y:40,r:22},
-        {x:240,y:180,r:14},
-        {x:220,y:50,r:17}
-    ];
-    drawBase(ctxA);
-    drawDiff(ctxB);
-    gameFindRunning = false;
-}
-
-cavB.onclick = function(e){
-    if(!gameFindRunning) return;
-    const rect = cavB.getBoundingClientRect();
-    const scaleX = 300 / rect.width;
-    const scaleY = 240 / rect.height;
-    const clickX = (e.clientX - rect.left)*scaleX;
-    const clickY = (e.clientY - rect.top)*scaleY;
-    for(let i=answerList.length-1;i>=0;i--){
-        const p = answerList[i];
-        const dist = Math.hypot(clickX-p.x, clickY-p.y);
-        if(dist < p.r){
-            answerList.splice(i,1);
-            findScore += 1;
-            findScoreDom.innerText = findScore;
-            if(answerList.length === 0){
-                alert("🎉恭喜！全部找完啦！");
-                gameFindRunning = false;
-            }
-            return;
+// 渲染页面
+function renderGrid(){
+    gridWrap.innerHTML = "";
+    for(let i=0;i<4;i++){
+        for(let j=0;j<4;j++){
+            const val = grid[i][j];
+            const div = document.createElement("div");
+            div.style.height = "75px";
+            div.style.borderRadius = "6px";
+            div.style.display = "flex";
+            div.style.alignItems = "center";
+            div.style.justifyContent = "center";
+            div.style.fontSize = val >= 1024 ? "20px" : "26px";
+            div.style.fontWeight = "bold";
+            div.style.background = colorMap[val] || "#333";
+            div.style.color = val <=4 ? "#776e65" : "#fff";
+            div.innerText = val || "";
+            gridWrap.appendChild(div);
         }
     }
 }
 
-openFindBtn.onclick = function(){
-    findModal.style.display = "flex";
-    resetFindGame();
+// 向左移动
+function moveLeft(){
+    let moved = false;
+    for(let i=0;i<4;i++){
+        let row = grid[i].filter(v=>v!==0);
+        for(let j=0;j<row.length-1;j++){
+            if(row[j] === row[j+1]){
+                row[j] *=2;
+                score2048 += row[j];
+                row.splice(j+1,1);
+            }
+        }
+        const newRow = Array(4).fill(0);
+        row.forEach((v,idx)=>newRow[idx]=v);
+        if(JSON.stringify(grid[i]) !== JSON.stringify(newRow)) moved=true;
+        grid[i] = newRow;
+    }
+    scoreDom2048.innerText = score2048;
+    return moved;
 }
-closeFindBtn.onclick = function(){
-    findModal.style.display = "none";
-    gameFindRunning = false;
+// 矩阵旋转
+function rotate(g){
+    const res = Array(4).fill().map(()=>Array(4).fill(0));
+    for(let i=0;i<4;i++){
+        for(let j=0;j<4;j++){
+            res[j][3-i] = g[i][j];
+        }
+    }
+    return res;
 }
-startFindBtn.onclick = function(){
-    gameFindRunning = true;
+// 移动控制
+function move(dir){
+    if(!game2048Run) return;
+    let moved = false;
+    if(dir === "left") moved = moveLeft();
+    if(dir === "right"){
+        grid = rotate(rotate(grid));
+        moved = moveLeft();
+        grid = rotate(rotate(grid));
+    }
+    if(dir === "up"){
+        grid = rotate(grid);
+        moved = moveLeft();
+        grid = rotate(rotate(rotate(grid)));
+    }
+    if(dir === "down"){
+        grid = rotate(rotate(rotate(grid)));
+        moved = moveLeft();
+        grid = rotate(grid);
+    }
+    if(moved){
+        addRandom();
+        renderGrid();
+        checkGameOver();
+    }
+}
+// 判断游戏结束
+function checkGameOver(){
+    for(let i=0;i<4;i++){
+        for(let j=0;j<4;j++){
+            if(grid[i][j] ===0) return;
+            const cur = grid[i][j];
+            if(j+1<4 && grid[i][j+1]===cur) return;
+            if(i+1<4 && grid[i+1][j]===cur) return;
+        }
+    }
+    game2048Run = false;
+    alert("游戏结束！得分："+score2048);
+}
+
+// 键盘方向键
+document.onkeydown = function(e){
+    if(!game2048Run) return;
+    switch(e.key){
+        case "ArrowLeft": move("left");break;
+        case "ArrowRight": move("right");break;
+        case "ArrowUp": move("up");break;
+        case "ArrowDown": move("down");break;
+    }
+}
+// 手机触屏滑动
+let touchStartX = 0, touchStartY =0;
+gridWrap.ontouchstart = e=>{
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+}
+gridWrap.ontouchend = e=>{
+    if(!game2048Run) return;
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    const dy = e.changedTouches[0].clientY - touchStartY;
+    if(Math.abs(dx) > Math.abs(dy)){
+        if(dx>30) move("right");
+        else if(dx<-30) move("left");
+    }else{
+        if(dy>30) move("down");
+        else if(dy<-30) move("up");
+    }
+}
+
+open2048Btn.onclick = function(){
+    modal2048.style.display = "flex";
+    initGrid();
+    game2048Run = false;
+}
+close2048Btn.onclick = function(){
+    modal2048.style.display = "none";
+    game2048Run = false;
+}
+start2048Btn.onclick = function(){
+    game2048Run = true;
 }
 </script>
 
 
-
 </body>
 </html>
-
-
