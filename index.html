@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -6,7 +7,7 @@
 <style>
 body {
     font-family: system-ui, sans-serif;
-    max-width: 600px;
+    max-width: 650px;
     margin: 40px auto;
     padding: 0 20px;
     font-size: 18px;
@@ -18,26 +19,39 @@ body {
     display: inline-block;
     margin: 10px 0;
 }
+#gameBox {
+    margin-top: 30px;
+}
+#gameCanvas {
+    border: 2px solid #aaa;
+    background: #111;
+    border-radius: 8px;
+}
+.score-text{
+    color:#333;
+    font-weight:bold;
+}
 </style>
 </head>
 <body>
 
 <p>Hello 大家好</p>
 <p>我是楔萩，这是我的个人网站。 </p>
-<p>很高兴你来到这里, 你可以在以下的网站找到我</p>
+<p>很高兴你来到这里</p>
 
-<!-- 时钟区域 -->
 <div id="time-box">
 📅 <span id="datetime"></span>
 </div>
 
-<ul>
-  <li> <a href="https://s.xsj.qq.com/8qSPO6qs">QQ小世界</a> </li>
-  <li> <a href="https://b23.tv/DaMyQHn">哔哩哔哩</a> </li>
-</ul>
 <p>我会更新一些有趣的视频，欢迎你来找我玩。</p>
 
+<div id="gameBox">
+<h3>🎮 弹弹珠小游戏（打砖块） <span class="score-text">得分：<span id="score">0</span></span></h3>
+<canvas id="gameCanvas" width="600" height="350"></canvas>
+</div>
+
 <script>
+// 时钟代码
 function updateTime(){
     const now = new Date();
     const year = now.getFullYear();
@@ -52,6 +66,128 @@ function updateTime(){
 }
 updateTime();
 setInterval(updateTime,1000);
+
+// ========== 弹弹珠打砖块游戏 ==========
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+const scoreDom = document.getElementById('score');
+let score = 0;
+
+// 小球
+let ballX = canvas.width / 2;
+let ballY = canvas.height - 60;
+let ballR = 8;
+let dx = 4;
+let dy = -4;
+
+// 挡板
+const paddleW = 100;
+const paddleH = 12;
+let paddleX = canvas.width / 2 - paddleW / 2;
+const paddleY = canvas.height - 25;
+
+// 砖块
+const brickRow = 4;
+const brickCol = 7;
+const brickW = 70;
+const brickH = 18;
+const brickPad = 6;
+const brickTop = 30;
+const brickLeft = 10;
+let bricks = [];
+
+function initBricks(){
+    score = 0;
+    scoreDom.innerText = score;
+    for(let r=0; r<brickRow; r++){
+        bricks[r] = [];
+        for(let c=0; c<brickCol; c++){
+            bricks[r][c] = {
+                x: c*(brickW+brickPad)+brickLeft,
+                y: r*(brickH+brickPad)+brickTop,
+                alive: true
+            }
+        }
+    }
+}
+initBricks();
+
+// 鼠标控制挡板
+canvas.addEventListener('mousemove', (e)=>{
+    const rect = canvas.getBoundingClientRect();
+    paddleX = e.clientX - rect.left - paddleW/2;
+    if(paddleX < 0) paddleX = 0;
+    if(paddleX + paddleW > canvas.width) paddleX = canvas.width - paddleW;
+})
+
+function drawBall(){
+    ctx.beginPath();
+    ctx.arc(ballX, ballY, ballR, 0, Math.PI*2);
+    ctx.fillStyle="#fff";
+    ctx.fill();
+    ctx.closePath();
+}
+function drawPaddle(){
+    ctx.fillStyle="#42a5f5";
+    ctx.fillRect(paddleX, paddleY, paddleW, paddleH);
+}
+function drawBricks(){
+    for(let r=0; r<brickRow; r++){
+        for(let c=0; c<brickCol; c++){
+            const b = bricks[r][c];
+            if(b.alive){
+                ctx.fillStyle="#ef5350";
+                ctx.fillRect(b.x,b.y,brickW,brickH);
+            }
+        }
+    }
+}
+
+function collision(){
+    for(let r=0; r<brickRow; r++){
+        for(let c=0; c<brickCol; c++){
+            const b = bricks[r][c];
+            if(b.alive){
+                if(ballX > b.x && ballX < b.x+brickW && ballY > b.y && ballY < b.y+brickH){
+                    dy = -dy;
+                    b.alive = false;
+                    score += 10;
+                    scoreDom.innerText = score;
+                }
+            }
+        }
+    }
+}
+
+function loop(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    drawBricks();
+    drawBall();
+    drawPaddle();
+    collision();
+
+    // 左右边界反弹
+    if(ballX + dx < ballR || ballX + dx > canvas.width - ballR) dx = -dx;
+    // 顶部反弹
+    if(ballY + dy < ballR) dy = -dy;
+    // 碰到挡板
+    if(ballY + dy > paddleY - ballR && ballX > paddleX && ballX < paddleX + paddleW){
+        dy = -dy;
+    }
+    // 掉到底，重置游戏
+    if(ballY + dy > canvas.height){
+        ballX = canvas.width/2;
+        ballY = canvas.height - 60;
+        dx = 4;
+        dy = -4;
+        initBricks();
+    }
+
+    ballX += dx;
+    ballY += dy;
+    requestAnimationFrame(loop);
+}
+loop();
 </script>
 
 </body>
